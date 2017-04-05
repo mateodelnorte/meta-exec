@@ -19,7 +19,14 @@ module.exports = function (options, cb) {
 
     if ( ! options.suppressLogging) console.log(`\n${chalk.cyan(path.basename(options.displayDir))}:`)
 
-    code = execSync(options.cmd, { cwd: options.dir, env: process.env, stdio: 'inherit' });
+    const execOptions = { 
+      cwd: options.dir,
+      env: process.env,
+      shell: (process.platform === 'win32') ? undefined : process.env.SHELL,
+      stdio: 'inherit'
+    };
+
+    code = execSync(options.cmd, execOptions);
 
   } catch (err) {
     
@@ -52,12 +59,5 @@ module.exports = function (options, cb) {
   if ( ! options.suppressLogging) console.log(success);
   
   if (cb) return cb(null, { output: success });
-
-};
-
-module.exports.register = (program) => {
-
-  program
-    .command('exec', 'run arbitrary commands against your meta repo and child git repositories')
 
 };
