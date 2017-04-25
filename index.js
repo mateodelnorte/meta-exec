@@ -58,6 +58,6 @@ module.exports = function (options, cb) {
 module.exports.register = (program) => {
 
   program
-    .command('exec', 'run arbitrary commands against your meta repo and child git repositories')
+    .command('exec', 'execute a command against meta repo and child repo dirs')
 
-};
+}
