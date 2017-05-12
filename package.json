@@ -1,8 +1,11 @@
 {
   "name": "meta-exec",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "exec plugin for meta for executing synchronous commands to stdout with a standard format",
   "main": "index.js",
+  "bin": {
+    "meta-exec": "./bin/meta-exec"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,7 +26,6 @@
   "dependencies": {
     "chalk": "^1.1.3",
     "debug": "^2.6.0",
-    "get-meta-file": "0.0.1",
     "meta-loop": "0.0.3"
   }
 }
