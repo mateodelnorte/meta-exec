@@ -1,6 +1,6 @@
 {
   "name": "meta-exec",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "exec plugin for meta for executing synchronous commands to stdout with a standard format",
   "main": "index.js",
   "bin": {
@@ -26,6 +26,6 @@
   "dependencies": {
     "chalk": "^1.1.3",
     "debug": "^2.6.0",
-    "meta-loop": "0.0.3"
+    "meta-loop": "^0.0.4"
   }
 }
