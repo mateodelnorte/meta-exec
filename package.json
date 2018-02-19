@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://www.npmjs.com"
   },
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "exec plugin for meta for executing synchronous commands to stdout with a standard format",
   "main": "index.js",
   "bin": {

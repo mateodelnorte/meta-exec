@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const metaLoop = require('meta-loop');
+const metaLoop = require('@essential-projects/meta-loop');
 
 if ( ! process.argv[2] || process.argv[2] === '--help')
   return console.log(`\n  usage:\n\n    meta exec <command>\n`);
