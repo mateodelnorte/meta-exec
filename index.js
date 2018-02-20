@@ -1,5 +1,5 @@
 const chalk = require('chalk');
-const debug = require('debug')('@essential-projects/meta-exec');
+const debug = require('debug')('meta-exec');
 const execSync = require('child_process').execSync;
 const path = require('path');
 
@@ -19,7 +19,7 @@ module.exports = function (options, cb) {
 
     if ( ! options.suppressLogging) console.log(`\n${chalk.cyan(path.basename(options.displayDir))}:`)
 
-    code = execSync(options.cmd, { cwd: options.dir, env: process.env, stdio: 'inherit' });
+    code = execSync(options.cmd, { cwd: options.dir, env: process.env, stdio:[0,1,2] });
 
   } catch (err) {
     
@@ -28,7 +28,11 @@ module.exports = function (options, cb) {
     let errorMessage = `${chalk.red(path.basename(options.displayDir))} exited with error: ${err.toString()}`;
     
     if ( ! options.suppressLogging) console.error(errorMessage);
-    
+
+    if (options.exitOnError) {
+      process.exit(1);
+    }
+
     if (cb) return cb(null, { error: errorMessage });
 
     return;
@@ -40,7 +44,11 @@ module.exports = function (options, cb) {
     let errorMessage = `${chalk.red(path.basename(options.displayDir))} exited with code: ${code}`;
     
     if ( ! options.suppressLogging) console.error(errorMessage);
-    
+
+    if (options.exitOnError) {
+      process.exit(1);
+    }
+
     if (cb) return cb(null, { err: errorMessage });
 
     return;
