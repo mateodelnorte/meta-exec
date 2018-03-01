@@ -3,7 +3,7 @@ const debug = require('debug')('meta-exec');
 const execSync = require('child_process').execSync;
 const path = require('path');
 
-module.exports = function (options, cb) {
+module.exports = function (options, cb, errorCb) {
 
   if (options.suppressLogging === undefined) options.suppressLogging = false;
 
@@ -22,16 +22,13 @@ module.exports = function (options, cb) {
     code = execSync(options.cmd, { cwd: options.dir, env: process.env, stdio:[0,1,2] });
 
   } catch (err) {
+
+    if (errorCb) errorCb(err);
     
-    // a cmd error isnt a loop error,
-    // we just want to output the cmd's output
+    // if there is no error callback, we're just going to forward the output
     let errorMessage = `${chalk.red(path.basename(options.displayDir))} exited with error: ${err.toString()}`;
     
     if ( ! options.suppressLogging) console.error(errorMessage);
-
-    if (options.exitOnError) {
-      process.exit(1);
-    }
 
     if (cb) return cb(null, { error: errorMessage });
 
@@ -40,19 +37,16 @@ module.exports = function (options, cb) {
   }
 
   if (code) {
-    
+
     let errorMessage = `${chalk.red(path.basename(options.displayDir))} exited with code: ${code}`;
+
+    if (errorCb) errorCb(new Error(errorMessage));
     
     if ( ! options.suppressLogging) console.error(errorMessage);
-
-    if (options.exitOnError) {
-      process.exit(1);
-    }
 
     if (cb) return cb(null, { err: errorMessage });
 
     return;
-
   } 
 
   let success = chalk.green(`${path.basename(options.displayDir)} ✓`);
@@ -63,7 +57,9 @@ module.exports = function (options, cb) {
 
 };
 
-module.exports.register = (program) => {
+module.exports.register = (program, registerHandleError) => {
+
+
 
   program
     .command('exec', 'execute a command against meta repo and child repo dirs')
