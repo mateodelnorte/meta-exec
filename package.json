@@ -1,8 +1,5 @@
 {
   "name": "meta-exec",
-  "publishConfig": {
-    "registry": "https://www.npmjs.com"
-  },
   "version": "0.0.8",
   "description": "exec plugin for meta for executing synchronous commands to stdout with a standard format",
   "main": "index.js",
