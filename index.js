@@ -26,7 +26,7 @@ module.exports = function (options, cb, errorCb) {
     if (errorCb) errorCb(err);
     
     // if there is no error callback, we're just going to forward the output
-    let errorMessage = `${chalk.red(path.basename(options.displayDir))} exited with error: ${err.toString()}`;
+    let errorMessage = `${chalk.red(path.basename(options.displayDir))}: command '${options.cmd}' exited with error: ${err.toString()}`;
     
     if ( ! options.suppressLogging) console.error(errorMessage);
 
@@ -38,7 +38,7 @@ module.exports = function (options, cb, errorCb) {
 
   if (code) {
 
-    let errorMessage = `${chalk.red(path.basename(options.displayDir))} exited with code: ${code}`;
+    let errorMessage = `${chalk.red(path.basename(options.displayDir))} '${options.cmd}' exited with code: ${code}`;
 
     if (errorCb) errorCb(new Error(errorMessage));
     
@@ -56,12 +56,3 @@ module.exports = function (options, cb, errorCb) {
   if (cb) return cb(null, { output: success });
 
 };
-
-module.exports.register = (program, registerHandleError) => {
-
-
-
-  program
-    .command('exec', 'execute a command against meta repo and child repo dirs')
-
-}
