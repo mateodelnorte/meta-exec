@@ -5,7 +5,9 @@ const path = require('path');
 
 module.exports = function (options, cb, errorCb) {
 
+  if (options.stdio === undefined) options.stdio = [0, 1, 2];
   if (options.suppressLogging === undefined) options.suppressLogging = false;
+  if (options.suppressLogging) options.stdio[1] = 'ignore';
 
   options.dir = options.dir || process.cwd();
   options.displayDir = options.displayDir || options.dir;
@@ -16,11 +18,14 @@ module.exports = function (options, cb, errorCb) {
   var code = null;
 
   try {
+    if (!options.suppressLogging)
+      console.log(`\n${chalk.cyan(path.basename(options.displayDir))}:`);
 
-    if ( ! options.suppressLogging) console.log(`\n${chalk.cyan(path.basename(options.displayDir))}:`)
-
-    code = execSync(options.cmd, { cwd: options.dir, env: process.env, stdio:[0,1,2] });
-
+    code = execSync(options.cmd, {
+      cwd: options.dir,
+      env: process.env,
+      stdio: options.stdio,
+    });
   } catch (err) {
 
     if (errorCb) errorCb(err);
