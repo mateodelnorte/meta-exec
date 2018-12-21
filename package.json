@@ -1,10 +1,10 @@
 {
   "name": "meta-exec",
-  "version": "0.0.8",
+  "version": "0.0.0-development",
   "description": "exec plugin for meta for executing synchronous commands to stdout with a standard format",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\""
   },
   "repository": {
     "type": "git",
