@@ -1,23 +1,19 @@
 language: node_js
 node_js:
-  - 8
-  - 10
-  - 11
-
+  - '8'
+  - '10'
+  - 'node'
+cache: npm
 notifications:
   email: false
-
-before_install:
-  - npm install -g codecov
-script:
-  - npm run test
-  - codecov
-
+branches:
+  except:
+    - '/^v\d+\.\d+\.\d+$/'
 jobs:
-  include:      
+  include:
     - stage: deploy
       if: branch == master && !fork
-      node_js: node # pre-installed version
+      node_js: '8.9.1' # pre-installed version
       script:
-        - npm install -g semantic-release
+        - npm install -g semantic-release@^15
         - semantic-release
