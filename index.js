@@ -1,7 +1,9 @@
 const chalk = require('chalk');
 const debug = require('debug')('meta-exec');
 const cp = require('child_process');
-const path = require('path');
+const { getFileLocation } = require('get-meta-file');
+
+const metaDir = getFileLocation().replace('.meta', '');
 
 module.exports = function(options, cb, errorCb) {
   if (options.stdio === undefined) options.stdio = [0, 1, 2];
@@ -10,7 +12,7 @@ module.exports = function(options, cb, errorCb) {
 
   options.cmd = options.cmd || options.command;
   options.dir = options.dir || process.cwd();
-  options.displayDir = options.displayDir || options.dir;
+  options.displayDir = options.displayDir || options.dir.replace(metaDir, '');
   options.parallel = options.parallel || false;
 
   debug(`executing command ${options.cmd} in dir ${options.dir}`);
@@ -29,9 +31,7 @@ module.exports = function(options, cb, errorCb) {
           (err, stdout, stderr) => {
             if (err) return reject(err);
             if (err) {
-              let errorMessage = `${chalk.red(path.basename(options.displayDir))} '${
-                options.cmd
-              }' exited with code: ${err}`;
+              let errorMessage = `${chalk.red(options.displayDir)} '${options.cmd}' exited with code: ${err}`;
 
               if (errorCb) errorCb(new Error(errorMessage));
 
@@ -42,12 +42,12 @@ module.exports = function(options, cb, errorCb) {
               return;
             }
 
-            if (!options.suppressLogging) console.log(`\n${chalk.cyan(path.basename(options.displayDir))}:`);
+            if (!options.suppressLogging) console.log(`\n${chalk.cyan(options.displayDir)}:`);
 
             stdout.length && console.log(stdout.trim());
             stderr.length && console.log(stderr.trim());
 
-            let success = chalk.green(`${path.basename(options.displayDir)} ✓`);
+            let success = chalk.green(`${options.displayDir} ✓`);
 
             if (!options.suppressLogging) console.log(success);
             return resolve(err ? 1 : 0);
@@ -55,7 +55,7 @@ module.exports = function(options, cb, errorCb) {
         );
       })
     : new Promise((resolve, reject) => {
-        if (!options.suppressLogging) console.log(`\n${chalk.cyan(path.basename(options.displayDir))}:`);
+        if (!options.suppressLogging) console.log(`\n${chalk.cyan(options.displayDir)}:`);
         try {
           const code = cp.execSync(options.cmd, {
             cwd: options.dir,
@@ -63,9 +63,7 @@ module.exports = function(options, cb, errorCb) {
             stdio: options.stdio,
           });
           if (code) {
-            let errorMessage = `${chalk.red(path.basename(options.displayDir))} '${
-              options.cmd
-            }' exited with code: ${code}`;
+            let errorMessage = `${chalk.red(options.displayDir)} '${options.cmd}' exited with code: ${code}`;
 
             if (errorCb) errorCb(new Error(errorMessage));
 
@@ -76,7 +74,7 @@ module.exports = function(options, cb, errorCb) {
             return;
           }
 
-          let success = chalk.green(`${path.basename(options.displayDir)} ✓`);
+          let success = chalk.green(`${options.displayDir} ✓`);
 
           if (!options.suppressLogging) console.log(success);
 
@@ -85,7 +83,7 @@ module.exports = function(options, cb, errorCb) {
           if (errorCb) errorCb(err);
 
           // if there is no error callback, we're just going to forward the output
-          let errorMessage = `${chalk.red(path.basename(options.displayDir))}: command '${
+          let errorMessage = `${chalk.red(options.displayDir)}: command '${
             options.cmd
           }' exited with error: ${err.toString()}`;
 
