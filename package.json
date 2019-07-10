@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "commit": "git-cz",
-    "lint": "prettier --write \"bin/*\" index.js",
+    "lint": "prettier --write \"bin/*\" index.js \"__tests__/*.js\"",
     "test": "jest --config jest.json --coverage",
     "test:coverage": "jest --config jest.json --coverage",
     "test:watch": "jest --config jest.json --watch"
