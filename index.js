@@ -3,7 +3,8 @@ const debug = require('debug')('meta-exec');
 const cp = require('child_process');
 const { getFileLocation } = require('get-meta-file');
 
-const metaDir = getFileLocation().replace('.meta', '');
+const fileLocation = getFileLocation() || '';
+const metaDir = fileLocation.replace('.meta', '');
 
 module.exports = function(options, cb, errorCb) {
   if (options.stdio === undefined) options.stdio = [0, 1, 2];
