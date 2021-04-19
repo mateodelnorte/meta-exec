@@ -6,7 +6,7 @@ const { getFileLocation } = require('get-meta-file');
 const fileLocation = getFileLocation() || '';
 const metaDir = fileLocation.replace('.meta', '');
 
-module.exports = function(options, cb, errorCb) {
+module.exports = function (options, cb, errorCb) {
   if (options.stdio === undefined) options.stdio = [0, 1, 2];
   if (options.suppressLogging === undefined) options.suppressLogging = false;
   if (options.suppressLogging) options.stdio[1] = 'ignore';
@@ -97,10 +97,10 @@ module.exports = function(options, cb, errorCb) {
       });
 
   execPromise
-    .then(success => {
+    .then((success) => {
       if (cb) return cb(null, { output: success });
     })
-    .catch(errorMessage => {
+    .catch((errorMessage) => {
       if (cb) return cb(null, { error: errorMessage });
     });
 };

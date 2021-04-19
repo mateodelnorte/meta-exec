@@ -35,8 +35,8 @@ describe('index.js', () => {
 
     expect(cp.execSync).toBeCalledWith('pwd', expect.anything());
 
-    console.log.mock.calls.forEach(callArr => {
-      callArr.forEach(call => {
+    console.log.mock.calls.forEach((callArr) => {
+      callArr.forEach((call) => {
         expect(call.includes(rootDir)).toBe(false);
         expect(call.includes(projectPath)).toBe(true);
       });
